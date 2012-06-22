@@ -1,2 +1,6 @@
+CC=g++
+LIBS= -std=c++0x -lsfml-graphics -lsfml-window -lsfml-system
+
 all:
-	g++ -o ufogame ufogame2.cpp -std=c++0x -lsfml-system -lsfml-graphics -lsfml-window
+	$(CC) -o ufogame ufogame2.cpp $(LIBS)
+	
