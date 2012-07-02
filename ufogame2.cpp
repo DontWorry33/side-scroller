@@ -21,7 +21,11 @@ int main()
 	
 	//Create window and event handler
 	sf::RenderWindow App(sf::VideoMode(800,600),"Views");
+	sf::RenderWindow Menu;
+	//Menu.setVisible(false);
+	
 	sf::Event Event;
+	sf::Event Menu_Event;
 	
 	//construct ufo object (main player)
 	Player UFO;
@@ -40,6 +44,7 @@ int main()
 	MyString score("Score: ",0, sf::Color(0,0,238));
 	MyString time_passed("Time: ",0, sf::Color(255,193,37));
 	MyString s_speed("Speed: ",1,sf::Color(220,20,60));
+	MyString laser_limit("Laser Limit: ",10,sf::Color(220,20,60));
 	
 	//Construct main camera
 	MyCamera MainCam(sf::Vector2f(800,600),1);
@@ -64,6 +69,32 @@ int main()
 			}
 		}
 		float factor = GameTime.restart().asSeconds();
+		
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Insert))
+		{
+			Menu.create(sf::VideoMode(400,300),"Menu");
+			//Menu.setVisible(true);
+			while(Menu.isOpen())
+			{
+				while(Menu.pollEvent(Menu_Event))
+				{
+					switch (Menu_Event.type)
+					{
+						case sf::Event::Closed:
+							Menu.close();
+							break;
+						default:
+							break;
+					}
+				}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) Menu.close();
+			Menu.display();	
+			}
+			
+		//Menu.setVisible(false);
+			
+		}
+		
 		App.clear();
 		//Updates Time
 		time_passed.str.setString("Time: "+time_passed.UpdateString(time_passed.ss,c_time.getElapsedTime().asSeconds()));
@@ -156,7 +187,6 @@ void endGame(sf::RenderWindow& App, MyCamera MainCam)
 {
 	App.clear();
 	MyString end("Game is over!",MainCam.Center().x-80,MainCam.Center().y, sf::Color(255,69,0));
-	//end.str.SetColor(sf::Color(255,69,0));
 	App.draw(end.str);
 	App.display();
 	sleep(5);
