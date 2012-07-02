@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "mysprite.h"
+#include "mystring.h"
 #include "mycamera.h"
 #include "enemy.h"
 #include <SFML/Graphics.hpp>

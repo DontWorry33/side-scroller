@@ -46,10 +46,16 @@ bool Player::FireLasers(sf::RenderWindow& App, MySprite laser,
 						sf::Event& Event)
 {
 
+	if (laser_container.size() > 10)
+	{
+		MyString temp("TOO MANY LASERS ON SCREEN", sf::Color(122,139,139));
+		temp.str.setPosition(MainCam.Center().x-160,30);
+		App.draw(temp.str);
+	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
 		laser.spr.setPosition(pl_newX+(pl_imgW/2),pl_newY+(pl_imgH/2));
-		laser_container.push_back(laser);
+		if (laser_container.size() <= 10) laser_container.push_back(laser);
 	}
 			
 	for (auto it=laser_container.begin(); it!=laser_container.end() ; it++)
