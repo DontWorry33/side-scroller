@@ -1,2 +1,10 @@
 This is my first game using the SFML 2D Camera. I will be updating this quite frequently with new features.
 
+
+Controls:
+
+Up - Move up
+Down - Move down
+Left - Move left
+Right - Move right
+Spacebar - Shoot laser
