@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "mysprite.h"
+#include "mywindow.cpp"
 #include "enemy.cpp"
 #include "player.cpp"
 #include "mystring.cpp"
@@ -19,13 +20,12 @@ int main()
 {
 	srand(time(NULL));
 	
-	//Create window and event handler
+	//Create windows and event handler
 	sf::RenderWindow App(sf::VideoMode(800,600),"Views");
-	sf::RenderWindow Menu;
+	MyWindow Menu;
 	//Menu.setVisible(false);
 	
 	sf::Event Event;
-	sf::Event Menu_Event;
 	
 	//construct ufo object (main player)
 	Player UFO;
@@ -69,32 +69,7 @@ int main()
 			}
 		}
 		float factor = GameTime.restart().asSeconds();
-		
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Insert))
-		{
-			Menu.create(sf::VideoMode(400,300),"Menu");
-			//Menu.setVisible(true);
-			while(Menu.isOpen())
-			{
-				while(Menu.pollEvent(Menu_Event))
-				{
-					switch (Menu_Event.type)
-					{
-						case sf::Event::Closed:
-							Menu.close();
-							break;
-						default:
-							break;
-					}
-				}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) Menu.close();
-			Menu.display();	
-			}
-			
-		//Menu.setVisible(false);
-			
-		}
-		
+				
 		App.clear();
 		//Updates Time
 		time_passed.str.setString("Time: "+time_passed.UpdateString(time_passed.ss,c_time.getElapsedTime().asSeconds()));
@@ -110,7 +85,9 @@ int main()
 		s_speed.str.setString("Speed: "+s_speed.UpdateString(s_speed.ss, MainCam.speed));
 		s_speed.str.setPosition(MainCam.Center().x+235,0);
 	
-	
+		//Checks wether to display menu (Default->Insert)
+		Menu.Create();
+		
 		if (c_enemyspawn.getElapsedTime().asSeconds() >= 1.f)
 		{
 			main.SetRand(MainCam.Center());
