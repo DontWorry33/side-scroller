@@ -2,60 +2,64 @@
 
 Player::Player()
 {
-	pl_img.LoadFromFile("data/ufo.png");
-	pl_imgH = pl_img.GetHeight();
-	pl_imgW = pl_img.GetWidth();
-	pl.SetImage(pl_img);
+	pl_img.loadFromFile("data/ufo.png");
+	pl_imgH = pl_img.getSize().x;
+	pl_imgW = pl_img.getSize().y;
+	pl.setTexture(pl_img);
 }
 
-void Player::MoveDirection(sf::RenderWindow& App, MyCamera MainCam)
+void Player::MoveDirection(sf::RenderWindow& App, MyCamera MainCam, sf::Event& Event, float factor)
 {
-	float factor(App.GetFrameTime());
+	
+	 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	 {
+		if (pl_newX <= MainCam.Center().x-400) pl_newX=pl_newX;
+		else pl.move(-factor*400,0);
+	 }
 
-	if (App.GetInput().IsKeyDown(sf::Key::Right))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 		if (pl_newX+pl_imgW >= MainCam.Center().x+400) pl_newX=pl_newX;
-		else pl.Move(factor*400,0);
+		else pl.move(factor*400,0);
 	}
-	if (App.GetInput().IsKeyDown(sf::Key::Left))
-	{
-		if (pl_newX <= MainCam.Center().x-400) pl_newX=pl_newX;
-		else pl.Move(-factor*400,0);
-	}
-	if (App.GetInput().IsKeyDown(sf::Key::Up))
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
 		if (pl_newY <= 0.f) pl_newY=pl_newY;
-		else pl.Move(0,-factor*400);
+		else pl.move(0,-factor*400);	
 	}
-	if (App.GetInput().IsKeyDown(sf::Key::Down))
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
 		if (pl_newY+pl_imgH >= 600.f) pl_newY=pl_newY;
-		else pl.Move(0,factor*400);
+		else pl.move(0,factor*400);		
 	}
-	pl_newX = pl.GetPosition().x;
-	pl_newY = pl.GetPosition().y;
-	App.Draw(pl);
+	
+	pl_newX = pl.getPosition().x;
+	pl_newY = pl.getPosition().y;
+	App.draw(pl);
 }
 
 bool Player::FireLasers(sf::RenderWindow& App, MySprite laser, 
 						std::list<MySprite>& laser_container,
-						MyCamera MainCam, std::vector<Enemy>& enemies)
+						MyCamera MainCam, std::vector<Enemy>& enemies,
+						sf::Event& Event)
 {
-	if (App.GetInput().IsKeyDown(sf::Key::Space))
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
-		laser.spr.SetPosition(pl_newX+(pl_imgW/2),pl_newY+(pl_imgH/2));
+		laser.spr.setPosition(pl_newX+(pl_imgW/2),pl_newY+(pl_imgH/2));
 		laser_container.push_back(laser);
-		
 	}
-	
+			
 	for (auto it=laser_container.begin(); it!=laser_container.end() ; it++)
 	{
-		it->spr.Move(MainCam.speed,0);
-		it->spr.Move(App.GetFrameTime()*500,0);
+		it->spr.move(MainCam.speed,0);
+		it->spr.move(15,0);
 		
-		it->posX = it->spr.GetPosition().x;
-		it->posY = it->spr.GetPosition().y;		
-		App.Draw(it->spr);
+		it->posX = it->spr.getPosition().x;
+		it->posY = it->spr.getPosition().y;		
+		App.draw(it->spr);
 		
 		for (unsigned int en=0; en<enemies.size(); en++)
 		{

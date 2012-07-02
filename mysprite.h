@@ -7,12 +7,12 @@ struct MySprite
 {
 	MySprite(const char* imgPath)
 	{
-		img.LoadFromFile(imgPath);
-		img_w = img.GetWidth();
-		img_h = img.GetHeight();
-		spr.SetImage(img);
+		img.loadFromFile(imgPath);
+		img_w = img.getSize().x;
+		img_h = img.getSize().y;
+		spr.setTexture(img);
 	}	
-	sf::Image img;
+	sf::Texture img;
 	sf::Sprite spr;
 	int img_w;
 	int img_h;

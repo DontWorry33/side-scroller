@@ -12,12 +12,12 @@ Enemy::Enemy()
 	inv_initX = 0;
 	inv_initY = 0;
 	
-	if (!inv_i.LoadFromFile("data/ufo2.png")) std::cout << "Failed to load Image" << std::endl;
+	if (!inv_i.loadFromFile("data/ufo2.png")) std::cout << "Failed to load Image" << std::endl;
 	//else std::cout << "Image loaded" << std::endl;
-	inv_imgW = inv_i.GetWidth();
-	inv_imgH = inv_i.GetHeight();
+	inv_imgW = inv_i.getSize().x;
+	inv_imgH = inv_i.getSize().y;
 	std::cout << inv_imgH << std::endl;
-	inv.SetImage(inv_i);
+	inv.setTexture(inv_i);
 }
 
 double Enemy::randrange(double from, double to)
@@ -32,7 +32,7 @@ void Enemy::SetRand(sf::Vector2f cent)
 	int max_h = 600-inv_imgH;
 	inv_initX=randrange(max_bnd,max_bnd+100);
 	inv_initY=randrange(1,max_h);
-	inv.SetPosition(inv_initX, inv_initY);
+	inv.setPosition(inv_initX, inv_initY);
 }
 
 //pl_newX/Y

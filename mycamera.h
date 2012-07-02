@@ -16,3 +16,4 @@ struct MyCamera
 };
 
 #endif
+

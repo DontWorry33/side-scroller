@@ -18,7 +18,7 @@ struct MyString
 	std::string UpdateString(int value, bool operation);
 	std::string UpdateString(std::stringstream& ss, float updater);
 
-	sf::String str;
+	sf::Text str;
 	std::stringstream ss;
 	double initNum;
 	sf::Vector2f cords;

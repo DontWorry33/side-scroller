@@ -26,10 +26,10 @@ int main()
 	//construct ufo object (main player)
 	Player UFO;
 	
-	//construct sprites
+	//construct sprites/container
 	MySprite laser("data/laser.png");
 	std::list <MySprite> laser_container;
-	MySprite background("data/background.jpg");
+	//MySprite background("data/space.gif");
 	
 	//Create enemy and container for enemies
 	Enemy main;
@@ -41,75 +41,76 @@ int main()
 	MyString time_passed("Time: ",0, sf::Color(255,193,37));
 	MyString s_speed("Speed: ",1,sf::Color(220,20,60));
 	
-	//Set colors to strings
-	//health.str.SetColor(sf::Color(0,238,0));
-	//score.str.SetColor(sf::Color(0,0,238));
-	//time_passed.str.SetColor(sf::Color(255,193,37));
-	
 	//Construct main camera
 	MyCamera MainCam(sf::Vector2f(800,600),1);
 
 	//Create clocks
+	sf::Clock GameTime;
 	sf::Clock c_time;
 	sf::Clock c_enemyspawn;
 
-	while (App.IsOpened())
+	while (App.isOpen())
 	{
-		while (App.GetEvent(Event))
+		while (App.pollEvent(Event))
 		{
-			switch (Event.Type)
+			switch (Event.type)
 			{
 				case sf::Event::Closed:
-					App.Close();
+					App.close();
 					break;
 					
 				default:
 					break;
 			}
 		}
-		App.Clear();
+		float factor = GameTime.restart().asSeconds();
+		App.clear();
 		//Updates Time
-		time_passed.str.SetText("Time: "+time_passed.UpdateString(time_passed.ss,c_time.GetElapsedTime()));
+		time_passed.str.setString("Time: "+time_passed.UpdateString(time_passed.ss,c_time.getElapsedTime().asSeconds()));
 		//Starts moving camera
 		MainCam.MoveCamera(App);
 		//Sets ufo to move with camera
-		UFO.pl.Move(MainCam.speed,0);
+		UFO.pl.move(MainCam.speed,0);
 		
 		//Sets texts to move with camera
-		score.str.SetPosition(MainCam.Center().x-395,0);
-		health.str.SetPosition(MainCam.Center().x-200,0);
-		time_passed.str.SetPosition(MainCam.Center().x+15,0);
-		s_speed.str.SetText("Speed: "+s_speed.UpdateString(s_speed.ss, MainCam.speed));
-		s_speed.str.SetPosition(MainCam.Center().x+235,0);
+		score.str.setPosition(MainCam.Center().x-395,0);
+		health.str.setPosition(MainCam.Center().x-200,0);
+		time_passed.str.setPosition(MainCam.Center().x+15,0);
+		s_speed.str.setString("Speed: "+s_speed.UpdateString(s_speed.ss, MainCam.speed));
+		s_speed.str.setPosition(MainCam.Center().x+235,0);
 	
 	
-		if (c_enemyspawn.GetElapsedTime() >= 1.f)
+		if (c_enemyspawn.getElapsedTime().asSeconds() >= 1.f)
 		{
 			main.SetRand(MainCam.Center());
 			enemies.push_back(main);
-			c_enemyspawn.Reset();
+			c_enemyspawn.restart();
 		}
 	
 	
+		//draw background(in development)
+		//App.draw(background.spr);
+		
+	
 		//draw text to screen
-		App.Draw(health.str);
-		App.Draw(score.str);
-		App.Draw(time_passed.str);
-		App.Draw(s_speed.str);
+		App.draw(health.str);
+		App.draw(score.str);
+		App.draw(time_passed.str);
+		App.draw(s_speed.str);
 		
 		//Player Movement
-		UFO.MoveDirection(App, MainCam);
+		UFO.MoveDirection(App, MainCam, Event, factor);
 		
 		//Collision between laser/enemy
-		if (UFO.FireLasers(App, laser, laser_container, MainCam, enemies))
+		if (UFO.FireLasers(App, laser, laser_container, MainCam, enemies, Event))
 		{
-			score.str.SetText("Score: "+score.UpdateString(1,true));
+			score.str.setString("Score: "+score.UpdateString(1,true));
 		}
 		
 		//Move enemies+Collision between player/enemy
 		if (Movement(enemies,UFO, MainCam)) 
 		{
-			health.str.SetText("Health: "+health.UpdateString(10,false));
+			health.str.setString("Health: "+health.UpdateString(10,false));
 			if (health.initNum <= 0) 
 			{
 				endGame(App, MainCam);
@@ -120,11 +121,11 @@ int main()
 		//Display invaders
 		for (unsigned int tmp=0; tmp<enemies.size(); tmp++) 
 		{
-			App.Draw(enemies[tmp].inv);
+			App.draw(enemies[tmp].inv);
 		}
 		
 		//display everything drawn
-		App.Display();
+		App.display();
 	}
 		
 	return EXIT_SUCCESS;
@@ -135,9 +136,9 @@ bool Movement(vector<Enemy>& enemies, Player UFO, MyCamera MainCam)
 {
 	for (unsigned int en=0; en<enemies.size(); en++)
 	{		
-		if (enemies[en].AbleToMove) enemies[en].inv.Move(-10,0);
-		enemies[en].inv_newX = enemies[en].inv.GetPosition().x;
-		enemies[en].inv_newY = enemies[en].inv.GetPosition().y;
+		if (enemies[en].AbleToMove) enemies[en].inv.move(-10,0);
+		enemies[en].inv_newX = enemies[en].inv.getPosition().x;
+		enemies[en].inv_newY = enemies[en].inv.getPosition().y;
 		
 		if ( (UFO.pl_newX+UFO.pl_imgW >= enemies[en].inv_newX && UFO.pl_newX+UFO.pl_imgW <= enemies[en].inv_newX+enemies[en].inv_imgW) && (((UFO.pl_newY <= enemies[en].inv_newY+enemies[en].inv_imgH) && (UFO.pl_newY+UFO.pl_imgH >= enemies[en].inv_newY+enemies[en].inv_imgH)) || ((UFO.pl_newY+UFO.pl_imgH >= enemies[en].inv_newY) && (UFO.pl_newY+UFO.pl_imgH <= enemies[en].inv_newY+enemies[en].inv_imgH))))
 		
@@ -153,10 +154,10 @@ bool Movement(vector<Enemy>& enemies, Player UFO, MyCamera MainCam)
 
 void endGame(sf::RenderWindow& App, MyCamera MainCam)
 {
-	App.Clear();
+	App.clear();
 	MyString end("Game is over!",MainCam.Center().x-80,MainCam.Center().y, sf::Color(255,69,0));
 	//end.str.SetColor(sf::Color(255,69,0));
-	App.Draw(end.str);
-	App.Display();
+	App.draw(end.str);
+	App.display();
 	sleep(5);
 }

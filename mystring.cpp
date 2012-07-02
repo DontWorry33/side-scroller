@@ -1,44 +1,44 @@
 #include "mystring.h"
 
-sf::Font MyString::arial = arial.GetDefaultFont();
+sf::Font MyString::arial = arial.getDefaultFont();
 
 MyString::MyString(std::string name, sf::Color color)
 {
-	str.SetText(name);
-	str.SetFont(arial);
-	str.SetSize(20);
-	str.SetColor(color);
+	str.setString(name);
+	str.setFont(arial);
+	str.setCharacterSize(20);
+	str.setColor(color);
 }
 
 MyString::MyString(std::string name, double xCord, double yCord, sf::Color color)
 {
 	cords.x = xCord;
 	cords.y = yCord;
-	str.SetText(name);
-	str.SetFont(MyString::arial);
-	str.SetSize(20);
-	str.SetPosition(cords);
-	str.SetColor(color);
+	str.setString(name);
+	str.setFont(MyString::arial);
+	str.setCharacterSize(20);
+	str.setPosition(cords);
+	str.setColor(color);
 }
 
 MyString::MyString(const char* name, double startNum, sf::Color color)
 {
 	initNum=startNum;
-	str.SetText(name+UpdateString(0,true));
-	str.SetFont(MyString::arial);
-	str.SetSize(20);
-	str.SetColor(color);
+	str.setString(name+UpdateString(0,true));
+	str.setFont(MyString::arial);
+	str.setCharacterSize(20);
+	str.setColor(color);
 }
 MyString::MyString(const char* name, double startNum, double xCord, double yCord, sf::Color color)
 {
 	cords.x = xCord;
 	cords.y = yCord;
 	initNum=startNum;
-	str.SetText(name+UpdateString(0,true));
-	str.SetFont(MyString::arial);
-	str.SetSize(20);
-	str.SetPosition(cords);
-	str.SetColor(color);
+	str.setString(name+UpdateString(0,true));
+	str.setFont(MyString::arial);
+	str.setCharacterSize(20);
+	str.setPosition(cords);
+	str.setColor(color);
 }
 
 std::string MyString::UpdateString(int value, bool operation)

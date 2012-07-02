@@ -11,11 +11,12 @@
 struct Player
 {
 	Player();
-	void MoveDirection(sf::RenderWindow&, MyCamera MainCam);
+	void MoveDirection(sf::RenderWindow&, MyCamera MainCam, sf::Event& Event, float factor);
 	bool FireLasers(sf::RenderWindow& App, MySprite laser, 
 	std::list<MySprite>& laser_container,
 	MyCamera MainCam,
-	std::vector<Enemy>& enemies);
+	std::vector<Enemy>& enemies,
+	sf::Event& Event);
 	
 	float pl_newX;
 	float pl_newY;
@@ -26,7 +27,7 @@ struct Player
 	sf::Vector2f lz_pos;
 	
 	sf::Sprite pl;
-	sf::Image pl_img;
+	sf::Texture pl_img;
 	
 };
 

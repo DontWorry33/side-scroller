@@ -28,7 +28,7 @@ struct Enemy
 	float tm;
 	
 	sf::Sprite inv;
-	sf::Image inv_i;
+	sf::Texture inv_i;
 };
 
 #endif
