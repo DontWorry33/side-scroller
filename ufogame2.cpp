@@ -163,7 +163,7 @@ bool Movement(vector<Enemy>& enemies, Player UFO, MyCamera MainCam)
 
 void endGame(sf::RenderWindow& App, MyCamera MainCam)
 {
-	App.clear();
+	//App.clear();
 	MyString end("Game is over!",MainCam.Center().x-80,MainCam.Center().y, sf::Color(255,69,0));
 	App.draw(end.str);
 	App.display();
