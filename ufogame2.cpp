@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <unistd.h>
 
 #include "mysprite.h"
 #include "mywindow.cpp"
